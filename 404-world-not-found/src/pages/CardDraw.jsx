@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
-import backgroundImage from '../images/AdobeStock_1373984100.jpeg';
+import backgroundImage from '../images/peakpx2.jpg';
 
 
 const suits = {
@@ -59,15 +59,15 @@ const CardDraw = () => {
   };
 
   return (
-    <div className="text-green-400 flex flex-col min-w-screen min-h-screen"
+    <div className="text-green-400 flex flex-col min-w-screen min-h-screen bg-cover font-theme"
     style={{ backgroundImage: `url(${backgroundImage})` }}>
       {/* Navbar at the top */}
       <Navbar />
   
       {/* Main content centered below the navbar */}
-      <div className="flex-1 flex flex-col items-center justify-center p-8">
-        <div className="mb-10 font-mono text-center">
-          <h2 className="text-5xl mb-6 glitch-text">Oracle Deck Interface</h2>
+      <div className="flex-1 flex flex-col items-center justify-center p-8 backdrop-blur-sm">
+        <div className="mb-10 text-center">
+          <h2 className="text-5xl mb-6 glitch-text">ORACLE DECK INTERFACE</h2>
           <p className="text-md opacity-70 max-w-2xl mb-6">
             Draw a card to summon a challenge from the corrupted matrix. Correct answers repair the fractured code!
           </p>

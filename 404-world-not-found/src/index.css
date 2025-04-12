@@ -130,8 +130,7 @@ body {
 
 @font-face {
   font-family: "future";
-  src: url("./fonts/lunar-escape/Lunar\ Escape.woff2") format("woff2"),
-       url("./fonts/lunar-escape/Lunar\ Escape.woff2") format("woff");
+  src: url('./fonts/terminal-grotesque/Terminal-Grotesque-master/terminal-grotesque.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }

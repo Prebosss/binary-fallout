@@ -7,14 +7,14 @@ export default function Home() {
 
   return (
     <div 
-      className="min-h-screen min-w-screen bg-cover bg-center bg-fixed text-green-500 fade-in" 
+      className="min-h-screen min-w-screen bg-center bg-fixed text-green-400 fade-in font-theme " 
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      <div className="backdrop-blur-xs min-h-screen flex flex-col">
+      <div className="backdrop-blur-sm min-h-screen flex flex-col">
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center">
-          <h1 className="text-5xl font-bold mb-6 text-shadow-lg">Binary Fallout</h1>
-          <p className="mb-8 text-lg text-shadow-lg">Restore the world, one card at a time.</p>
+          <h1 className="text-[6rem] font-bold  text-shadow-lg italic">BINARY FALLOUT</h1>
+          <p className="mb-8 text-2xl text-shadow-lg">Restore the world, one card at a time.</p>
           <div className="flex flex-row gap-6">
             <button
               onClick={() => navigate('/card')}
