@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
+import backgroundImage from '../images/AdobeStock_831376640.jpeg';
+
 
 const suits = {
   'S': '♠️',
