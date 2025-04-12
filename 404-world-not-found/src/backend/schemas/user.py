@@ -8,4 +8,5 @@ class User(Document):
 
     def passwordVerify(self, password):
         return self.password == password
-        
+
+
