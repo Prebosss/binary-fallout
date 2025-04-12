@@ -126,3 +126,31 @@ body {
     transform: translateY(0%);
   }
 }
+
+
+@font-face {
+  font-family: "future";
+  src: url("./fonts/lunar-escape/Lunar\ Escape.woff2") format("woff2"),
+       url("./fonts/lunar-escape/Lunar\ Escape.woff2") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.font-theme{
+  font-family: "future", sans-serif;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeInDown 2s cubic-bezier(0.22, 1, 0.36, 1);
+}

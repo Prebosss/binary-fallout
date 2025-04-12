@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
-import backgroundImage from '../images/AdobeStock_831376640.jpeg';
+import backgroundImage from '../images/AdobeStock_1373984100.jpeg';
 
 
 const suits = {
@@ -59,7 +59,8 @@ const CardDraw = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-green-400 flex flex-col min-w-screen min-h-screen">
+    <div className="text-green-400 flex flex-col min-w-screen min-h-screen"
+    style={{ backgroundImage: `url(${backgroundImage})` }}>
       {/* Navbar at the top */}
       <Navbar />
   
