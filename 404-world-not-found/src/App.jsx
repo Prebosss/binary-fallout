@@ -9,6 +9,7 @@ import EndScreen from './pages/EndScreen';
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import About from './pages/About';
+import TestGemini from "./pages/TestGemini";
 
 const App = () => {
   const [allCardsCollected, setAllCardsCollected] = useState(false);
@@ -37,6 +38,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/test-gemini" element={<TestGemini />} />
           <Route path="/card" element={
             <>
               <CardDraw />

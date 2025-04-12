@@ -13,6 +13,9 @@ export default function Navbar() {
         <Link to="/login" className="hover:underline">
           Login
         </Link>
+        <Link to="/test-gemini" className="hover:underline">
+          Test Gemini
+        </Link>
       </div>
     </nav>
   );
