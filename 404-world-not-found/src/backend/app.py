@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_jwt_extended import create_access_token, JWTManager
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 from dotenv import load_dotenv, find_dotenv
@@ -6,6 +7,9 @@ from schemas.user import User
 from mongoengine import connect, Document, StringField, DateTimeField
 from werkzeug.security import generate_password_hash
 import os
+
+app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # Change this!
+jwt = JWTManager(app)
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -54,8 +58,12 @@ def login():
     if not user.passwordVerify(password):
         return jsonify({"error": "Invalid username/password"}), 401
 
-    return jsonify({"message": "Login successful"}), 200
-
+    access_token = create_access_token(identity=username)
+    return jsonify({
+        "message": "Login successful",
+        "token": access_token
+    }), 200
+    
 
     
 

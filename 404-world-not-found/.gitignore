@@ -35,4 +35,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-fonts
+documentation
+source
+webspicmen
+techno-board

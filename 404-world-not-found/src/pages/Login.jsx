@@ -38,7 +38,7 @@ const Login = () => {
 
   return (
     <div
-      className="min-h-screen min-w-screen flex flex-col backdrop-blur-xs brightness-125"
+      className="min-h-screen min-w-screen flex flex-col backdrop-blur-xs brightness-125  text-green-300"
       style={{
         backgroundImage: `url(${backgroundImage})`,
       }}
@@ -46,7 +46,7 @@ const Login = () => {
       <Navbar />
       <div className="flex-1 flex flex-col items-center justify-center min-w-full relative bottom-5">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-10 text-center text-[3rem] font-bold text-green-500 font-theme">
+          <h2 className="mt-10 text-center text-[3rem] font-bold font-theme">
             {isRegister ? 'Register' : 'Login'}
           </h2>
         </div>
