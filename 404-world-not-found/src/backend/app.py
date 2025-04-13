@@ -8,12 +8,12 @@ from mongoengine import connect, Document, StringField, DateTimeField
 from werkzeug.security import generate_password_hash
 import os
 
-app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # Change this!
-jwt = JWTManager(app)
-
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
+
+jwt = JWTManager(app)
+app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # Change this!
 
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
