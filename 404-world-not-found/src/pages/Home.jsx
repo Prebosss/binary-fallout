@@ -14,7 +14,7 @@ export default function Home() {
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center">
           <h1 className="text-[6rem] font-bold  text-shadow-lg italic">BINARY FALLOUT</h1>
-          <p className="mb-8 text-2xl text-shadow-lg">Restore the reality, one card at a time.</p>
+          <p className="mb-8 text-2xl text-shadow-lg">Restore reality, one card at a time.</p>
           <div className="flex flex-row gap-6">
             <button
               onClick={() => navigate('/card')}
