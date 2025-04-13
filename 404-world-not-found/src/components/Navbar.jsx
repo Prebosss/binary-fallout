@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav className="w-full flex justify-between items-center px-12 py-8 text-green font-theme text-xl">
+    <nav className="w-full flex justify-between items-center px-12 py-8 text-green font-theme text-xl font-bold text-shadow-lg">
       <div className="font-bold tracking-widest">
         <Link to="/">Binary Fallout</Link>
       </div>

@@ -1,16 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import backgroundImage from '../images/peakpx.jpg';
+import backgroundImage from '../images/AdobeStock_1373984100.jpeg';
 
 export default function Home() {
   const navigate = useNavigate();
 
   return (
     <div 
-      className="min-h-screen min-w-screen bg-center bg-fixed text-green-400 fade-in font-theme " 
+      className="min-h-screen min-w-screen bg-center bg-cover bg-fixed text-green-200 fade-in font-theme " 
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      <div className="backdrop-blur-sm min-h-screen flex flex-col">
+      <div className="backdrop-blur-lg min-h-screen flex flex-col">
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center">
           <h1 className="text-[6rem] font-bold  text-shadow-lg italic">BINARY FALLOUT</h1>

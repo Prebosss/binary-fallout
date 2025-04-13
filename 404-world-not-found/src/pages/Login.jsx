@@ -1,22 +1,29 @@
-import React from 'react';
+// src/pages/Auth.jsx
+import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
+import backgroundImage from '../images/peakpx.jpg';
 
 const Login = () => {
+  const [isRegister, setIsRegister] = useState(false);
+
   return (
-    <div className="bg-white min-h-screen min-w-screen flex flex-col">
-      <Navbar/>
-      <div className="flex-1 flex flex-col items-center justify-center min-w-full">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm border-2 rounded-sm">
-          {/*LOGO CAN GO HERE*/}
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Login
+    <div
+      className="min-h-screen min-w-screen flex flex-col backdrop-blur-xs brightness-125"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+      }}
+    >
+      <Navbar />
+      <div className="flex-1 flex flex-col items-center justify-center min-w-full relative bottom-5">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <h2 className="mt-10 text-center text-[3rem] font-bold text-green-500 font-theme">
+            {isRegister ? 'Register' : 'Login'}
           </h2>
         </div>
-
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="email" className="block text-md font-medium leading-6 ">
                 Username
               </label>
               <div className="mt-2">
@@ -24,52 +31,75 @@ const Login = () => {
                   id="email"
                   name="email"
                   type="email"
-                  autoComplete="email"
+                  placeholder="Username"
                   required
-                  className="block w-full rounded-md border-0 bg-white px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 bg-white px-3 py-1.5 text-gray-900 shadow-sm 
+                             ring-1 ring-inset ring-gray-300 placeholder:text-gray-500 
+                             focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                  Password
-                </label>
-                <div className="text-sm">
-                </div>
-              </div>
+              <label htmlFor="password" className="block text-md font-medium leading-6">
+                Password
+              </label>
               <div className="mt-2">
                 <input
                   id="password"
                   name="password"
                   type="password"
-                  autoComplete="current-password"
+                  placeholder="Password"
                   required
-                  className="block w-full rounded-md border-0 bg-white px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 bg-white px-3 py-1.5 text-gray-900 shadow-sm 
+                             ring-1 ring-inset ring-gray-300 placeholder:text-gray-500 
+                             focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
+            {isRegister && (
+              <div>
+                <label htmlFor="confirm-password" className="block text-md font-medium leading-6">
+                  Confirm Password
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="confirm-password"
+                    name="confirm-password"
+                    placeholder="Confirm Password"
+                    type="password"
+                    required
+                    className="block w-full rounded-md border-0 bg-white px-3 py-1.5 text-gray-900 shadow-sm 
+                               ring-1 ring-inset ring-gray-300 placeholder:text-gray-500 
+                               focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+            )}
+
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-green-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Sign in
+                {isRegister ? 'Sign up' : 'Sign in'}
               </button>
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{' '}
-            <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-              Sign in
-            </a>
+          <p className="mt-10 text-center text-sm text-white">
+            {isRegister ? "Already have an account?" : "Don't have an account?"}{' '}
+            <button
+              onClick={() => setIsRegister(!isRegister)}
+              className="font-semibold text-green-200 hover:text-green-500"
+            >
+              {isRegister ? 'Log in' : 'Sign up'}
+            </button>
           </p>
         </div>
       </div>
-    </div>  
+    </div>
   );
 };
 

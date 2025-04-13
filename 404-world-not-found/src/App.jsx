@@ -5,7 +5,7 @@ import CardDraw from './pages/CardDraw';
 import QuestionModal from './components/QuestionModal';
 import Progress from './pages/Progress';
 import EndScreen from './pages/EndScreen';
-
+import Login from './pages/Login';
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import About from './pages/About';
@@ -38,6 +38,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/test-gemini" element={<TestGemini />} />
           <Route path="/card" element={
             <>
