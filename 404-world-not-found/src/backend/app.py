@@ -16,7 +16,7 @@ app = Flask(__name__)
 CORS(app)
 
 jwt = JWTManager(app)
-app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY", "fallback-key")
+app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # Change this!
 
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
@@ -110,24 +110,12 @@ def generate_content():
 def collect_card():
     user_id = get_jwt_identity()
     data = request.json
-    print("Incoming JSON payload:", data)
-
     card_data = data.get("card")
-    print("Card data received:", card_data)
-
-    if not card_data or "rank" not in card_data or "suit" not in card_data:
-        return jsonify({"error": "Missing card rank or suit"}), 422
     
     # Get user from database
     user = User.objects(id=user_id).first()
     if not user:
         return jsonify({"error": "User not found"}), 404
-    
-    # Generate card_id from rank and suit if not provided
-    if "id" not in card_data:
-        card_id = f"{card_data['rank']}{card_data['suit']}"
-    else:
-        card_id = card_data["id"]
     
     # Check if this card already exists in database
     card = Card.objects(
@@ -140,7 +128,7 @@ def collect_card():
         card = Card(
             rank=card_data["rank"],
             suit=card_data["suit"],
-            card_id=card_id  # Use the generated or provided id
+            card_id=card_data["id"]
         )
         card.save()
     
