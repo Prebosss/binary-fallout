@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom'; // Add this
+import { checkAuth } from '../api/login'; // Import the helper
 
 // In your QuestionModal.jsx component
 const generateQuestionWithGemini = async (card) => {
@@ -80,6 +82,8 @@ const QuestionModal = () => {
   const [feedback, setFeedback] = useState(null);
   const [currentCard, setCurrentCard] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [authError, setAuthError] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Listen for the cardDrawn event
@@ -116,6 +120,11 @@ const QuestionModal = () => {
     };
   }, []);
 
+  const redirectToLogin = () => {
+    setIsVisible(false);
+    navigate('/login');
+  };
+
   const checkAnswer = async (optionIndex) => {
     setSelectedOption(optionIndex);
     
@@ -125,10 +134,24 @@ const QuestionModal = () => {
         message: "Correct! Matrix repair sequence initiated.",
         explanation: currentQuestion.explanation
       });
-      
+
+      // Check if user is authenticated
+      if (!checkAuth()) {
+        setAuthError(true);
+        setFeedback({
+          isCorrect: true,
+          message: "Correct! But you need to login to save cards.",
+          explanation: currentQuestion.explanation
+        });
+        return;
+      }
+
       // Add card to collection via MongoDB API
       try {
         const token = localStorage.getItem('token');
+        console.log('Using token value:', token);
+        console.log('Attempting to send card to backend:', currentCard);
+
         const response = await fetch('http://localhost:5001/api/cards/collect', {
           method: 'POST',
           headers: {
@@ -137,12 +160,25 @@ const QuestionModal = () => {
           },
           body: JSON.stringify({ card: currentCard })
         });
-        
+
         if (response.ok) {
           // Trigger an event for the Progress component to update
           document.dispatchEvent(new CustomEvent('collectionUpdated'));
+          console.log('Card saved successfully!');
         } else {
-          console.error('Error saving card:', response.statusText);
+          // Handle authentication errors
+          if (response.status === 401 || response.status === 422) {
+            setAuthError(true);
+            setFeedback({
+              isCorrect: true,
+              message: "Correct! But your session has expired. Please login again.",
+              explanation: currentQuestion.explanation
+            });
+          } else {
+            // Log more details if the response is not OK
+            const errorData = await response.json().catch(() => ({}));
+            console.error(`Error saving card: ${response.status} ${response.statusText}`, errorData);
+          }
         }
       } catch (error) {
         console.error('Error saving card:', error);
@@ -172,8 +208,6 @@ const QuestionModal = () => {
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
         >
-
-
             <div className="text-green-400 font-mono">
               {/* Header with card info */}
               <div className="text-xs mb-6 opacity-50 flex justify-between">
@@ -231,6 +265,17 @@ const QuestionModal = () => {
                 >
                   <p className="text-center mb-2">{feedback.message}</p>
                   <p className="text-sm opacity-80">{feedback.explanation}</p>
+                  
+                  {authError && (
+                    <div className="mt-4 text-center">
+                      <button 
+                        onClick={redirectToLogin}
+                        className="px-3 py-1 bg-green-700 hover:bg-green-600 rounded text-white text-sm"
+                      >
+                        Login to Save Cards
+                      </button>
+                    </div>
+                  )}
                 </motion.div>
               )}
               
