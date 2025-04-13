@@ -51,7 +51,7 @@ const generateQuestionWithGemini = async (card) => {
 
 
   try {
-    const response = await fetch('http://localhost:5001/generate', {
+    const response = await fetch('http://binaryfallout.co/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ const QuestionModal = () => {
         console.log('Using token value:', token);
         console.log('Attempting to send card to backend:', currentCard);
 
-        const response = await fetch('http://localhost:5001/api/cards/collect', {
+        const response = await fetch('http://binaryfallout.co/api/cards/collect', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

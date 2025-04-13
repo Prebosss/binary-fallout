@@ -25,7 +25,7 @@ const Progress = () => {
       setIsLoading(true);
       const token = localStorage.getItem('token');
       
-      const response = await fetch('http://localhost:5001/api/cards/collection', {
+      const response = await fetch('http://binaryfallout.co/api/cards/collection', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
