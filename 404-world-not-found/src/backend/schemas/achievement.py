@@ -5,4 +5,4 @@ import datetime
 class Achievement(Document):
     name = StringField(required=True, unique=True)
     description = StringField(required=True)
-    created = DateTimeField(default=datetime.datetime.utcnow)
+    created = DateTimeField(default=datetime.datetime.now(datetime.timezone.utc))  # Updated to use timezone-aware datetime
