@@ -3,19 +3,15 @@ import React from "react";
 export default function TestGemini() {
   const callGemini = async () => {
     const prompt = document.getElementById("prompt").value;
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDj3KIH3Bktp8QKQkpJPY2pLe7wJSuet7s`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-        }),
-      }
-    );
+
+    const response = await fetch("http://127.0.0.1:5000/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
+    });
+
     const data = await response.json();
-    document.getElementById("output").textContent =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text || JSON.stringify(data);
+    document.getElementById("output").textContent = data.response || "No response";
   };
 
   return (

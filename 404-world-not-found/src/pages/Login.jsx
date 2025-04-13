@@ -2,9 +2,39 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import backgroundImage from '../images/peakpx.jpg';
+import { loginUser, registerUser } from "../api/login";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [isRegister, setIsRegister] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const username = e.target.username.value;
+    const password = e.target.password.value;
+    const confirmPassword = e.target["confirm-password"]?.value;
+  
+    if (isRegister && password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+  
+    try {
+      if (isRegister) {
+        const res = await registerUser(username, password);
+        alert(res.message);
+      } else {
+        const res = await loginUser(username, password);
+      }
+    
+      //Redirect after success
+      navigate("/progress"); // or any route you want
+    } catch (err) {
+      alert(err.message);
+    }    
+  };  
 
   return (
     <div
@@ -21,7 +51,7 @@ const Login = () => {
           </h2>
         </div>
         <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="username" className="block text-md font-medium leading-6 ">
                 Username

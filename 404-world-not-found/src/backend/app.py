@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
+from flask_cors import CORS
 from dotenv import load_dotenv, find_dotenv
 from schemas.user import User
 from mongoengine import connect, Document, StringField, DateTimeField
@@ -8,6 +9,7 @@ import os
 
 # Initialize Flask app
 app = Flask(__name__)
+CORS(app)
 
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
@@ -35,7 +37,7 @@ def add_user():
 
     return jsonify({"message": "User added successfully"}), 201
 
-@app.route('/api/login', methods=['Post'])
+@app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
     username = data.get("username")
@@ -50,7 +52,7 @@ def login():
         return jsonify({"error": "User not found"}), 404
 
     if not user.passwordVerify(password):
-        return jsonify({"error": "Invalid password"}), 401
+        return jsonify({"error": "Invalid username/password"}), 401
 
     return jsonify({"message": "Login successful"}), 200
 
