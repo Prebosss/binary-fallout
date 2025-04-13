@@ -12,6 +12,7 @@ class User(Document):
     achievements = ListField(ReferenceField(Achievement))
     solved_cards = ListField(StringField())
 
+    
     meta = {'collection': 'users'}
     
     def passwordVerify(self, password):
