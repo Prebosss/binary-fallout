@@ -1,13 +1,17 @@
-
 # schemas/user.py
-from mongoengine import Document, StringField, DateTimeField
+from mongoengine import Document, StringField, DateTimeField, ListField, ReferenceField
 from werkzeug.security import check_password_hash
-from datetime import datetime
+from .achievement import Achievement
+import datetime
 
 class User(Document):
     username = StringField(required=True, unique=True)
     password = StringField(required=True)
-    created_at = DateTimeField(default=datetime.utcnow)
+    created = DateTimeField(default=datetime.datetime.now(datetime.timezone.utc))  # Updated to use timezone-aware datetime
+
+    achievements = ListField(ReferenceField(Achievement))
+    solved_cards = ListField(StringField())
+
     
     meta = {'collection': 'users'}
     
