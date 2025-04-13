@@ -7,7 +7,7 @@ export default function Home() {
 
   return (
     <div 
-      className="min-h-screen min-w-screen bg-center bg-cover bg-fixed text-green-300 fade-in font-theme relative overflow-hidden" 
+      className="min-h-screen min-w-screen bg-center bg-cover bg-fixed text-green-400 fade-in font-theme relative overflow-hidden" 
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
       {/* VHS effect */}

@@ -223,7 +223,7 @@ body {
 }
 
 .vhs-shift::before {
-  color: rgb(219, 0, 0);
+  color: rgb(0, 183, 219);
   transform: translateX(-1px);
 }
 

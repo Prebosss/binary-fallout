@@ -25,7 +25,7 @@ const Progress = () => {
       setIsLoading(true);
       const token = localStorage.getItem('token');
       
-      const response = await fetch('http://binaryfallout.co/api/cards/collection', {
+      const response = await fetch('http://localhost:5001/api/cards/collection', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -83,8 +83,8 @@ const Progress = () => {
     return (
       <div className="min-h-screen bg-black text-green-400 font-mono flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-green-400 border-r-transparent"></div>
-          <p className="mt-4">Loading matrix repair data...</p>
+        <img className="inline-block w-8 h-8 animate-spin" src="../images/logo.png" alt="Logo" width="100" />
+          <p className="mt-4">Loading planetary repair data...</p>
         </div>
       </div>
     );
@@ -106,8 +106,8 @@ const Progress = () => {
       <div className="flex-1 flex justify-center items-center w-full overflow-y-auto py-8">
         <div className="max-w-4xl w-full px-6">
           <header className="mb-8 text-center">
-            <h2 className="text-[3.5rem] font-semibold italic mb-2 vhs-shift"
-            data-text="MATRIX REPAIR PROGRESS">MATRIX REPAIR PROGRESS</h2>
+            <h2 className="text-[3.7rem] max-w-4xl font-nomral font-theme italic mb-2 vhs-shift"
+            data-text="EARTH RESTORATION">EARTH RESTORATION</h2>
             <p className="text-sm opacity-90">
               Computational artifacts collected: {collection.length}/{totalCards}
             </p>
