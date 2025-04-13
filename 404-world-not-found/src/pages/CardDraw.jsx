@@ -67,7 +67,7 @@ const CardDraw = () => {
       {/* Main content centered below the navbar */}
       <div className="flex-1 flex flex-col items-center justify-center p-8 backdrop-blur-sm">
         <div className="mb-10 text-center">
-          <h2 className="text-5xl mb-6 glitch-text">ORACLE DECK INTERFACE</h2>
+          <h2 className="text-5xl mb-6 glitch-text">ORACLE DECK MAINFRAME</h2>
           <p className="text-md opacity-70 max-w-2xl mb-6">
             Draw a card to summon a challenge from the corrupted matrix. Correct answers repair the fractured code!
           </p>

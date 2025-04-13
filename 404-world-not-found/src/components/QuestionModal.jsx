@@ -1,56 +1,76 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Mock questions based on card suits
-const questionDatabase = {
-  'S': [ // Spades - Algorithms
-    {
-      question: "What is the time complexity of a binary search?",
-      options: ["O(n)", "O(n log n)", "O(log n)", "O(1)"],
-      correctAnswer: 2 // index of correct option
-    },
-    {
-      question: "Which sorting algorithm has the best average-case performance?",
-      options: ["Bubble Sort", "Merge Sort", "Quick Sort", "Selection Sort"],
-      correctAnswer: 2
-    }
-  ],
-  'H': [ // Hearts - Data Structures
-    {
-      question: "Which data structure operates on a LIFO basis?",
-      options: ["Queue", "Stack", "Linked List", "Binary Tree"],
-      correctAnswer: 1
-    },
-    {
-      question: "What is the primary advantage of a hash table?",
-      options: ["Ordered keys", "O(1) average lookup", "Memory efficiency", "Sequential access"],
-      correctAnswer: 1
-    }
-  ],
-  'D': [ // Diamonds - Systems 
-    {
-      question: "What is a deadlock in operating systems?",
-      options: ["A process that consumes too much memory", "When multiple processes are waiting for each other to release resources", "A security vulnerability", "An infinite loop in the code"],
-      correctAnswer: 1
-    },
-    {
-      question: "What does RAID stand for?",
-      options: ["Random Array of Independent Disks", "Redundant Array of Independent Disks", "Rapid Access for Internal Drives", "Remote Access for Input Devices"],
-      correctAnswer: 1
-    }
-  ],
-  'C': [ // Clubs - Networking
-    {
-      question: "Which protocol is connectionless?",
-      options: ["TCP", "HTTP", "UDP", "FTP"],
-      correctAnswer: 2
-    },
-    {
-      question: "Which layer of the OSI model deals with routing?",
-      options: ["Physical Layer", "Data Link Layer", "Network Layer", "Transport Layer"],
-      correctAnswer: 2
-    }
-  ]
+// In your QuestionModal.jsx component
+const generateQuestionWithGemini = async (card) => {
+  // Map card suits to question categories
+  const categories = {
+    'S': 'Algorithms and Data Structures',
+    'H': 'Programming Languages and Paradigms',
+    'D': 'Computer Systems and Architecture',
+    'C': 'Networking and Security'
+  };
+  
+  // Map card ranks to difficulty levels
+  const getDifficulty = (rank) => {
+    if (rank === 'A') return 'very easy';
+    if (['2', '3', '4'].includes(rank)) return 'easy';
+    if (['5', '6', '7'].includes(rank)) return 'medium';
+    if (['8', '9'].includes(rank)) return 'hard';
+    if (rank === '10') return 'very hard';
+    return 'medium'; // default
+  };
+  
+  const category = categories[card.suit];
+  const difficulty = getDifficulty(card.rank);
+  
+  // Craft prompt for Gemini
+  const prompt = `Generate a multiple-choice computer science question about ${category} at ${difficulty} difficulty level.
+  (You cannot use Markdown formatating)
+  
+  The categories include:
+    Spades = Data Structures and Algorithms
+    Hearts = Data Structures and Algorithms
+    Diamonds = Data Structures and Algorithms
+    Clubs = Data Structures and Algorithms
+
+  Format your response as a JSON object with the following structure:
+  {
+    "question": "Your question text here",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "correctAnswerIndex": 0,  // Index of the correct answer (0-3)
+    "explanation": "Brief explanation of why this answer is correct"
+  }
+  
+  For ${difficulty} difficulty, ensure the question is appropriately challenging. Make sure all options are plausible but only one is clearly correct. The range is from 1-10 in ascending ranking`;
+  
+  try {
+    const response = await fetch('http://localhost:5001/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt }),
+    });
+    
+    const data = await response.json();
+    
+    // Parse the response text as JSON
+    // Note: You might need to clean the response if Gemini adds extra text
+    let cleaned = data.response.trim();
+
+    // Remove triple backticks and optional json
+    cleaned = cleaned.replace(/```json|```/g, '').trim();
+
+    const questionData = JSON.parse(cleaned);
+
+    console.log('Cleaned response:', cleaned);
+
+    return questionData;
+  } catch (error) {
+    console.error('Error generating question:', error);
+    return null;
+  }
 };
 
 const QuestionModal = () => {
@@ -59,13 +79,35 @@ const QuestionModal = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [feedback, setFeedback] = useState(null);
   const [currentCard, setCurrentCard] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Listen for the cardDrawn event
-    const handleCardDrawn = (event) => {
+    const handleCardDrawn = async (event) => {
       const card = event.detail;
       setCurrentCard(card);
-      showQuestionForCard(card);
+      setIsLoading(true);
+      setIsVisible(true);
+      
+      // Generate question using Gemini
+      const questionData = await generateQuestionWithGemini(card);
+      console.log(questionData);
+      
+      if (questionData) {
+        setCurrentQuestion(questionData);
+      } else {
+        // Fallback to a default question if API fails
+        setCurrentQuestion({
+          question: "Which sorting algorithm has O(n log n) time complexity?",
+          options: ["Bubble Sort", "Quick Sort", "Insertion Sort", "Selection Sort"],
+          correctAnswerIndex: 1,
+          explanation: "Quick Sort has an average time complexity of O(n log n)."
+        });
+      }
+      
+      setSelectedOption(null);
+      setFeedback(null);
+      setIsLoading(false);
     };
 
     document.addEventListener('cardDrawn', handleCardDrawn);
@@ -74,99 +116,110 @@ const QuestionModal = () => {
     };
   }, []);
 
-  const showQuestionForCard = (card) => {
-    // Get a random question for the card's suit
-    const suitQuestions = questionDatabase[card.suit];
-    if (suitQuestions) {
-      const randomIndex = Math.floor(Math.random() * suitQuestions.length);
-      setCurrentQuestion(suitQuestions[randomIndex]);
-      setSelectedOption(null);
-      setFeedback(null);
-      setIsVisible(true);
-    }
-  };
-
-  const checkAnswer = (optionIndex) => {
+  const checkAnswer = async (optionIndex) => {
     setSelectedOption(optionIndex);
     
-    if (optionIndex === currentQuestion.correctAnswer) {
+    if (optionIndex === currentQuestion.correctAnswerIndex) {
       setFeedback({
         isCorrect: true,
-        message: "Correct! Matrix repair sequence initiated."
+        message: "Correct! Matrix repair sequence initiated.",
+        explanation: currentQuestion.explanation
       });
       
-      // Add card to collection in localStorage
-      const collection = JSON.parse(localStorage.getItem('cardCollection') || '[]');
-      if (!collection.some(card => card.id === currentCard.id)) {
-        collection.push(currentCard);
-        localStorage.setItem('cardCollection', JSON.stringify(collection));
+      // Add card to collection via MongoDB API
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5001/api/cards/collect', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ card: currentCard })
+        });
+        
+        if (response.ok) {
+          // Trigger an event for the Progress component to update
+          document.dispatchEvent(new CustomEvent('collectionUpdated'));
+        } else {
+          console.error('Error saving card:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error saving card:', error);
       }
-      
-      // Trigger an event for the Progress component to update
-      document.dispatchEvent(new CustomEvent('collectionUpdated'));
     } else {
       setFeedback({
         isCorrect: false,
-        message: "Incorrect. Matrix instability detected."
+        message: "Incorrect. Matrix instability detected.",
+        explanation: currentQuestion.explanation
       });
     }
   };
-
-  const closeModal = () => {
-    setIsVisible(false);
-  };
-
+  
   return (
     <AnimatePresence>
-      {isVisible && currentQuestion && (
+      {isVisible && (
         <motion.div 
           className="fixed inset-0 flex items-center justify-center z-50 bg-black/80"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <motion.div 
-            className="w-full max-w-2xl bg-gray-900 border-2 border-green-500 p-6 rounded-lg shadow-lg shadow-green-500/20 mx-4"
-            initial={{ scale: 0.9, y: 20 }}
-            animate={{ scale: 1, y: 0 }}
-            exit={{ scale: 0.9, y: 20 }}
-          >
+            
+        <motion.div 
+          className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-gray-900 border-2 border-green-500 p-6 rounded-lg shadow-lg shadow-green-500/20 mx-4"
+          initial={{ scale: 0.9, y: 20 }}
+          animate={{ scale: 1, y: 0 }}
+          exit={{ scale: 0.9, y: 20 }}
+        >
+
+
             <div className="text-green-400 font-mono">
+              {/* Header with card info */}
               <div className="text-xs mb-6 opacity-50 flex justify-between">
                 <span>PROTOCOL: DEBUGGING REALITY</span>
                 <span>CARD: {currentCard?.rank}{currentCard?.suit}</span>
               </div>
               
-              <div className="mb-6">
-                <h3 className="text-xl mb-2">SYSTEM QUERY:</h3>
-                <p className="text-lg">{currentQuestion.question}</p>
-              </div>
-              
-              <div className="space-y-3 mb-6">
-                {currentQuestion.options.map((option, index) => (
-                  <button
-                    key={index}
-                    onClick={() => selectedOption === null && checkAnswer(index)}
-                    className={`w-full text-left p-3 border rounded-md transition-all ${
-                      selectedOption === null
-                        ? 'border-green-700 hover:border-green-500 hover:bg-green-900/30'
-                        : selectedOption === index
-                          ? currentQuestion.correctAnswer === index
-                            ? 'border-green-500 bg-green-900/50'
-                            : 'border-red-500 bg-red-900/50'
-                          : currentQuestion.correctAnswer === index && selectedOption !== null
-                            ? 'border-green-500 bg-green-900/50'
-                            : 'border-gray-700 opacity-50'
-                    }`}
-                    disabled={selectedOption !== null}
-                  >
-                    <div className="flex items-center">
-                      <span className="mr-2 opacity-70">{index + 1}.</span>
-                      {option}
-                    </div>
-                  </button>
-                ))}
-              </div>
+              {isLoading ? (
+                <div className="py-12 text-center">
+                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-green-400 border-r-transparent"></div>
+                  <p className="mt-4">Generating challenge...</p>
+                </div>
+              ) : currentQuestion && (
+                <>
+                  <div className="mb-6">
+                    <h3 className="text-xl mb-2">SYSTEM QUERY:</h3>
+                    <p className="text-lg">{currentQuestion.question}</p>
+                  </div>
+                  
+                  <div className="space-y-3 mb-6">
+                    {currentQuestion.options.map((option, index) => (
+                      <button
+                        key={index}
+                        onClick={() => selectedOption === null && checkAnswer(index)}
+                        className={`w-full text-left p-3 border rounded-md transition-all ${
+                          selectedOption === null
+                            ? 'border-green-700 hover:border-green-500 hover:bg-green-900/30'
+                            : selectedOption === index
+                              ? currentQuestion.correctAnswerIndex === index
+                                ? 'border-green-500 bg-green-900/50'
+                                : 'border-red-500 bg-red-900/50'
+                              : currentQuestion.correctAnswerIndex === index && selectedOption !== null
+                                ? 'border-green-500 bg-green-900/50'
+                                : 'border-gray-700 opacity-50'
+                        }`}
+                        disabled={selectedOption !== null}
+                      >
+                        <div className="flex items-center">
+                          <span className="mr-2 opacity-70">{index + 1}.</span>
+                          {option}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
               
               {feedback && (
                 <motion.div
@@ -176,13 +229,14 @@ const QuestionModal = () => {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                  <p className="text-center">{feedback.message}</p>
+                  <p className="text-center mb-2">{feedback.message}</p>
+                  <p className="text-sm opacity-80">{feedback.explanation}</p>
                 </motion.div>
               )}
               
               <div className="flex justify-end">
                 <button
-                  onClick={closeModal}
+                  onClick={() => setIsVisible(false)}
                   className="px-4 py-2 bg-green-800 hover:bg-green-700 text-green-300 
                            rounded border border-green-600 transition-all focus:outline-none"
                 >
