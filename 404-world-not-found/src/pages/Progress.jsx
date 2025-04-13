@@ -13,16 +13,38 @@ const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 const Progress = () => {
   const [collection, setCollection] = useState([]);
   const [totalCards] = useState(40); // 4 suits × 10 ranks
+  const [isLoading, setIsLoading] = useState(true);
+  
+  const fetchCollection = async () => {
+    try {
+      setIsLoading(true);
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch('http://localhost:5001/api/cards/collection', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setCollection(data.collection);
+      } else {
+        console.error('Error fetching collection:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching collection:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   
   useEffect(() => {
-    // Load the collection from localStorage
-    const savedCollection = JSON.parse(localStorage.getItem('cardCollection') || '[]');
-    setCollection(savedCollection);
+    fetchCollection();
     
     // Listen for updates to the collection
     const handleCollectionUpdated = () => {
-      const updatedCollection = JSON.parse(localStorage.getItem('cardCollection') || '[]');
-      setCollection(updatedCollection);
+      fetchCollection();
     };
     
     document.addEventListener('collectionUpdated', handleCollectionUpdated);
@@ -46,6 +68,17 @@ const Progress = () => {
   const isCardCollected = (cardId) => {
     return collection.some(card => card.id === cardId);
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black text-green-400 font-mono flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-green-400 border-r-transparent"></div>
+          <p className="mt-4">Loading matrix repair data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black text-green-400 font-mono p-6">
