@@ -8,7 +8,7 @@ const Login = () => {
 
   return (
     <div
-      className="min-h-screen min-w-screen flex flex-col backdrop-blur-xs brightness-125"
+      className="min-h-screen min-w-screen flex flex-col backdrop-blur-xs brightness-150"
       style={{
         backgroundImage: `url(${backgroundImage})`,
       }}
