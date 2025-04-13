@@ -17,14 +17,16 @@ export default function Home() {
           <p className="mb-8 text-2xl text-shadow-lg">Restore reality, one card at a time.</p>
           <div className="flex flex-row gap-6">
             <button
-              onClick={() => navigate('/card')}
-              className="border-2  px-6 py-3 rounded-lg shadow-lg"
+              onClick={() => navigate('/login')}
+              className="border-2  px-6 py-3 rounded-lg shadow-lg cursor-pointer
+"
             >
               Start Game
             </button>
             <button
               onClick={() => navigate('/about')}
-              className="border-2 px-6 py-3 rounded-lg shadow-lg"
+              className="border-2 px-6 py-3 rounded-lg shadow-lg cursor-pointer
+"
             >
               Read More
             </button>

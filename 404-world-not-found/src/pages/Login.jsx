@@ -27,10 +27,9 @@ const Login = () => {
         alert(res.message);
       } else {
         const res = await loginUser(username, password);
+        //Redirect after success
+        navigate("/progress"); // or any route you want
       }
-    
-      //Redirect after success
-      navigate("/progress"); // or any route you want
     } catch (err) {
       alert(err.message);
     }    

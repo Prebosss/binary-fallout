@@ -7,7 +7,6 @@ import Progress from './pages/Progress';
 import EndScreen from './pages/EndScreen';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import Navbar from './components/Navbar';
 import About from './pages/About';
 import TestGemini from "./pages/TestGemini";
 
