@@ -92,20 +92,21 @@ const Progress = () => {
 
   return (
     <div 
-      className="min-h-screen text-green-400 font-mono flex flex-col bg-cover bg-center bg-fixed backdrop-blur-lg"
+      className="min-h-screen text-green-400 font-mono flex flex-col bg-cover bg-center bg-fixed backdrop-blur-lg overflow-hidden"
       style={{ 
         backgroundImage: `url(${backgroundImage})`, 
         backgroundColor: 'rgba(0, 0, 0, .6)',
         backgroundBlendMode: 'overlay'
       }}
     >
+      <div className="vhs-overlay absolute inset-0"></div>
       {/* Add the Navbar component */}
       <NavbarGame />
       
       <div className="flex-1 flex justify-center items-center w-full overflow-y-auto py-8">
         <div className="max-w-4xl w-full px-6">
           <header className="mb-8 text-center">
-            <h2 className="text-[3.5rem] font-normal mb-2 vhs-shift"
+            <h2 className="text-[3.5rem] font-semibold italic mb-2 vhs-shift"
             data-text="MATRIX REPAIR PROGRESS">MATRIX REPAIR PROGRESS</h2>
             <p className="text-sm opacity-90">
               Computational artifacts collected: {collection.length}/{totalCards}

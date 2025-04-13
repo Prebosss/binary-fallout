@@ -59,13 +59,15 @@ const CardDraw = () => {
   };
 
   return (
-    <div className="relative min-h-screen text-green-400 font-theme">
+    <div className="relative min-h-screen text-green-400 font-theme overflow-hidden">
       {/* Background image with absolute positioning */}
       <div 
         className="absolute inset-0 bg-cover bg-center z-0" 
         style={{ backgroundImage: `url(${backgroundImage})` }}
       />
       
+      <div className="vhs-overlay absolute inset-0"></div>
+
       {/* Backdrop blur layer that covers the entire page */}
       <div className="absolute inset-0 backdrop-blur-xl brightness-90 z-0" />
       
@@ -77,9 +79,9 @@ const CardDraw = () => {
         {/* Main content centered below the navbar */}
         <div className="flex-1 flex flex-col items-center justify-center p-8">
           <div className="mb-10 text-center">
-            <h2 className="text-5xl mb-6 font-bold vhs-shift"
-            data-text="ORACLE DECK MAINFRAME">ORACLE DECK MAINFRAME</h2>
-            <p className="text-2xl font-light text-shadow-xl max-w-xl mb-2">
+            <h2 className="text-[4rem] italic mb-6 font-semibold vhs-shift"
+            data-text="KNIGTHS MAINFRAME">KNIGTHS MAINFRAME</h2>
+            <p className="text-md font-semibold text-shadow-xl max-w-xl mb-2 font-mono">
               Draw a card to summon a challenge from the corrupted matrix. Correct answers repair the fractured code!
             </p>
           </div>
@@ -116,8 +118,8 @@ const CardDraw = () => {
               style={{ backfaceVisibility: 'hidden', transformStyle: 'preserve-3d' }}
             >
               <div className="text-center relative z-10">
-                <div className="text-xl mb-4 font-mono">ORACLE DECK</div>
-                <div className="text-xs opacity-70">PROJECT: REGENESIS</div>
+                <div className="text-xl mb-4 font-mono">KNIGHTMARE DECK</div>
+                <div className="text-sm opacity-70">PROJECT: REGENESIS</div>
               </div>
     
               {/* Card back pattern */}
