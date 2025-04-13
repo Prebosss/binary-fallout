@@ -23,14 +23,14 @@ const Login = () => {
         <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
             <div>
-              <label htmlFor="email" className="block text-md font-medium leading-6 ">
+              <label htmlFor="username" className="block text-md font-medium leading-6 ">
                 Username
               </label>
               <div className="mt-2">
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
+                  id="username"
+                  name="username"
+                  type="username"
                   placeholder="Username"
                   required
                   className="block w-full rounded-md border-0 bg-white px-3 py-1.5 text-gray-900 shadow-sm 
