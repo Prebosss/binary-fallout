@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import NavbarGame from '../components/NavbarGame';
+import backgroundImage from '../images/bunker.jpeg';
+
 
 const suits = {
   'S': '♠️',
@@ -89,19 +91,27 @@ const Progress = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-green-400 font-mono flex flex-col">
+    <div 
+      className="min-h-screen text-green-400 font-mono flex flex-col bg-cover bg-center bg-fixed backdrop-blur-lg"
+      style={{ 
+        backgroundImage: `url(${backgroundImage})`, 
+        backgroundColor: 'rgba(0, 0, 0, .6)',
+        backgroundBlendMode: 'overlay'
+      }}
+    >
       {/* Add the Navbar component */}
-      <Navbar />
+      <NavbarGame />
       
-      <div className="flex-1 p-6 flex flex-col items-center">
-        <div className="max-w-4xl w-full">
+      <div className="flex-1 flex justify-center items-center w-full overflow-y-auto py-8">
+        <div className="max-w-4xl w-full px-6">
           <header className="mb-8 text-center">
-            <h2 className="text-2xl mb-2">MATRIX REPAIR PROGRESS</h2>
-            <p className="text-sm opacity-70">
+            <h2 className="text-[3.5rem] font-normal mb-2 vhs-shift"
+            data-text="MATRIX REPAIR PROGRESS">MATRIX REPAIR PROGRESS</h2>
+            <p className="text-sm opacity-90">
               Computational artifacts collected: {collection.length}/{totalCards}
             </p>
             
-            <div className="mt-6 h-4 bg-gray-800 rounded-full overflow-hidden">
+            <div className="mt-6 h-4 bg-gray-800 rounded-full border-1 overflow-hidden">
               <motion.div 
                 className="h-full bg-green-600"
                 initial={{ width: 0 }}
@@ -127,7 +137,7 @@ const Progress = () => {
                   className={`aspect-w-2 aspect-h-3 border rounded-md overflow-hidden relative ${
                     collected 
                       ? 'border-green-500 bg-green-900/20' 
-                      : 'border-gray-700 bg-gray-900/50 grayscale opacity-40'
+                      : 'border-gray-500 bg-gray-900/50 grayscale opacity-40'
                   }`}
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
@@ -165,9 +175,9 @@ const Progress = () => {
             </button>
           </div>
           
-          <div className="mt-8 bg-black/50 border border-green-800 p-4 rounded-md text-sm">
+          <div className="mt-8 bg-black/70 border border-green-600 p-4 rounded-md text-sm">
             <h3 className="mb-2 text-lg">DEBUG LOG:</h3>
-            <div className="space-y-1 opacity-70">
+            <div className="space-y-1 opacity-90">
               {collection.length === 0 ? (
                 <p>No computational artifacts collected yet. Begin by drawing cards from the Oracle Deck.</p>
               ) : (
@@ -176,7 +186,7 @@ const Progress = () => {
                   <div className="grid grid-cols-4 gap-2">
                     {collection.map((card, index) => (
                       <div key={index} className="font-mono">
-                        {`[${index + 1}] ${card.rank}${suits[card.suit]}`}
+                        {`[${index + 1}] ${card.rank} ${suits[card.suit]}`}
                       </div>
                     ))}
                   </div>

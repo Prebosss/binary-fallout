@@ -1,6 +1,6 @@
 // src/pages/Auth.jsx
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
+import NavbarPublic from '../components/NavbarPublic';
 import backgroundImage from '../images/peakpx.jpg';
 import { loginUser, registerUser } from "../api/login";
 import { useNavigate } from "react-router-dom";
@@ -37,15 +37,15 @@ const Login = () => {
 
   return (
     <div
-      className="min-h-screen min-w-screen flex flex-col backdrop-blur-xs brightness-125  text-green-300"
+      className="min-h-screen min-w-screen flex flex-col backdrop-blur-xs brightness-120 text-green-500"
       style={{
         backgroundImage: `url(${backgroundImage})`,
       }}
     >
-      <Navbar />
+      <NavbarPublic />
       <div className="flex-1 flex flex-col items-center justify-center min-w-full relative bottom-5">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-10 text-center text-[3rem] font-bold font-theme">
+          <h2 className="mt-10 text-center text-[4rem] font-semibold italic font-theme vhs-shift">
             {isRegister ? 'Register' : 'Login'}
           </h2>
         </div>
@@ -110,7 +110,7 @@ const Login = () => {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-green-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-green-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
               >
                 {isRegister ? 'Sign up' : 'Sign in'}
               </button>
@@ -121,7 +121,7 @@ const Login = () => {
             {isRegister ? "Already have an account?" : "Don't have an account?"}{' '}
             <button
               onClick={() => setIsRegister(!isRegister)}
-              className="font-semibold text-green-200 hover:text-green-500"
+              className="font-semibold text-green-500 hover:text-green-900 cursor-pointer"
             >
               {isRegister ? 'Log in' : 'Sign up'}
             </button>

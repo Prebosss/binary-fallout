@@ -27,14 +27,18 @@ const generateQuestionWithGemini = async (card) => {
   const difficulty = getDifficulty(card.rank);
   
   // Craft prompt for Gemini
-  const prompt = `Generate a multiple-choice computer science question about ${category} at ${difficulty} difficulty level.
-  (You cannot use Markdown formatating)
-  
+  const prompt = `
+  You are a computer science tutor for UCF’s Foundation Exam. Generate a multiple-choice question about ${category} at ${difficulty} difficulty level that reflects the type of conceptual and practical knowledge expected from students preparing for this exam.
+
+  You cannot use Markdown formatting and only very very short and concise code snippets are permitted.
+  However, code snippets should not be very common in their chance to appear.
+  Make sure code snippets are properly formatted line-by-line which each line of code on their own line top to bottom as if you were ChatGPT. Do not generate answers that are off-topic from this information.
+
   The categories include:
-    Spades = Data Structures and Algorithms
-    Hearts = Data Structures and Algorithms
-    Diamonds = Data Structures and Algorithms
-    Clubs = Data Structures and Algorithms
+    Spades = Data Structures (Arrays, Binary Trees/Binary Search Trees, AVL Trees, Hash Tables, Heaps, Linked Lists, Queues, Stacks, Tries)
+    Hearts = Algorithms (This includes Sorting algorithms, Backtracking problems and questions on Recursion)
+    Diamonds = Bitwise Operators and Binary (Basic Binary Conversion to Decimal and Understanding of when to use the Logical Bitwise operators and what they do)
+    Clubs = Dynamic Memory Management in C (These will be questions on how to correctly use free() and malloc()/calloc())
 
   Format your response as a JSON object with the following structure:
   {
@@ -43,9 +47,10 @@ const generateQuestionWithGemini = async (card) => {
     "correctAnswerIndex": 0,  // Index of the correct answer (0-3)
     "explanation": "Brief explanation of why this answer is correct"
   }
-  
-  For ${difficulty} difficulty, ensure the question is appropriately challenging. Make sure all options are plausible but only one is clearly correct. The range is from 1-10 in ascending ranking`;
-  
+
+  For ${difficulty} difficulty, ensure the question is appropriately challenging for UCF's Foundation Exam prep. Make sure all options are plausible, but only one is clearly correct. The difficulty scale ranges from 1-3 (Easy), 4-6 (Medium), 7-10 (Hard) and should increase accordingly while remaining solvable for a well-prepared student.`;
+
+    
   try {
     const response = await fetch('http://localhost:5001/generate', {
       method: 'POST',

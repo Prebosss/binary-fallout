@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import backgroundImage from '../images/AdobeStock_1373984100.jpeg';
+import NavbarPublic from '../components/NavbarPublic';
+import backgroundImage from '../images/character.webp';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function Home() {
       <div className="vhs-overlay absolute inset-0"></div>
 
       <div className="backdrop-blur-lg min-h-screen flex flex-col relative z-10">
-        <Navbar />
+        <NavbarPublic />
         <div className="flex-1 flex flex-col items-center justify-center">
           <h1 
             className="text-[6rem] font-bold italic text-shadow-lg vhs-shift" 
@@ -22,13 +22,13 @@ export default function Home() {
           >
             BINARY FALLOUT
           </h1>
-          <p className="mb-8 text-2xl text-shadow-lg">Restore reality, one card at a time.</p>
+          <p className="mb-8 text-2xl text-shadow-lg">Restore the foundations of reality, one card at a time.</p>
           <div className="flex flex-row gap-6">
             <button
               onClick={() => navigate('/card')}
               className="border-2  px-6 py-3 rounded-lg shadow-lg cursor-pointer"
             >
-              Start Game
+              Try it out
             </button>
             <button
               onClick={() => navigate('/about')}
