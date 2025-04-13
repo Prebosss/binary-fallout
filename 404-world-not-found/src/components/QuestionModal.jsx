@@ -85,6 +85,7 @@ const QuestionModal = () => {
     // Listen for the cardDrawn event
     const handleCardDrawn = async (event) => {
       const card = event.detail;
+      
       setCurrentCard(card);
       setIsLoading(true);
       setIsVisible(true);
@@ -118,34 +119,41 @@ const QuestionModal = () => {
 
   const checkAnswer = async (optionIndex) => {
     setSelectedOption(optionIndex);
-    
+
     if (optionIndex === currentQuestion.correctAnswerIndex) {
       setFeedback({
         isCorrect: true,
         message: "Correct! Matrix repair sequence initiated.",
         explanation: currentQuestion.explanation
       });
-      
+
       // Add card to collection via MongoDB API
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5001/api/cards/collect', {
-          method: 'POST',
-          headers: {
+        console.log('Attempting to send card to backend:', currentCard); // Logging the card data
+
+        // --- Corrected fetch call below ---
+        const response = await fetch('http://localhost:5001/api/cards/collect', { // Start the options object here
+          method: 'POST',                                     // method is a property of the options object
+          headers: {                                          // headers is a property of the options object
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify({ card: currentCard })
-        });
-        
+          body: JSON.stringify({ card: currentCard })         // body is a property of the options object
+        }); // End the options object and the fetch call arguments
+
         if (response.ok) {
           // Trigger an event for the Progress component to update
           document.dispatchEvent(new CustomEvent('collectionUpdated'));
+          console.log('Card saved successfully!'); // Optional: success log
         } else {
-          console.error('Error saving card:', response.statusText);
+          // Log more details if the response is not OK (like 422)
+          const errorData = await response.json().catch(() => ({})); // Try to parse server error JSON
+          console.error(`Error saving card: ${response.status} ${response.statusText}`, errorData);
         }
       } catch (error) {
-        console.error('Error saving card:', error);
+        // This catches network errors or issues with the fetch call itself
+        console.error('Network error or issue saving card:', error);
       }
     } else {
       setFeedback({
