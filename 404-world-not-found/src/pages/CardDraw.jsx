@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import backgroundImage from '../images/peakpx2.jpg';
-
 
 const suits = {
   'S': '♠️',
@@ -15,6 +15,7 @@ const CardDraw = () => {
   const [card, setCard] = useState(null);
   const [isFlipped, setIsFlipped] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check if there's a saved card in localStorage
@@ -56,6 +57,10 @@ const CardDraw = () => {
       const event = new CustomEvent('cardDrawn', { detail: newCard });
       document.dispatchEvent(event);
     }, 600);
+  };
+
+  const goToInventory = () => {
+    navigate('/progress');
   };
 
   return (
@@ -121,16 +126,27 @@ const CardDraw = () => {
           </motion.div>
         </div>
   
-        <button 
-          onClick={drawCard}
-          disabled={isDrawing}
-          className="px-8 py-3 bg-green-800 hover:bg-green-700 text-green-300 
+        <div className="flex space-x-4">
+          <button 
+            onClick={drawCard}
+            disabled={isDrawing}
+            className="px-8 py-3 bg-green-800 hover:bg-green-700 text-green-300 
                     font-mono rounded border border-green-600 transition-all 
                     hover:shadow-lg hover:shadow-green-900/50 focus:outline-none
                     disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isDrawing ? 'Processing...' : 'Draw Card'}
-        </button>
+          >
+            {isDrawing ? 'Processing...' : 'Draw Card'}
+          </button>
+
+          <button 
+            onClick={goToInventory}
+            className="px-8 py-3 bg-green-800 hover:bg-green-700 text-green-300 
+                    font-mono rounded border border-green-600 transition-all 
+                    hover:shadow-lg hover:shadow-green-900/50 focus:outline-none"
+          >
+            Inventory
+          </button>
+        </div>
   
         <div className="mt-4 text-xs opacity-50 font-mono">
           {card ? `Last drawn: ${card.rank}${suits[card.suit]}` : 'No cards drawn yet'}
