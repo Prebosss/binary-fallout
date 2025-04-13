@@ -200,3 +200,53 @@ body {
     transform: translateY(100%);
   }
 }
+
+/* === VHS Static Overlay === */
+.vhs-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 255, 0, 0.03) 0px,
+    rgba(0, 255, 0, 0.03) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.95; }
+  50% { opacity: 1; }
+  100% { opacity: 0.9; }
+}
+
+/* Slight chromatic aberration */
+.vhs-shift {
+  position: relative;
+}
+
+.vhs-shift::before,
+.vhs-shift::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  color: inherit;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.vhs-shift::before {
+  color: red;
+  transform: translateX(-1px);
+}
+
+.vhs-shift::after {
+  color: blue;
+  transform: translateX(1px);
+}
