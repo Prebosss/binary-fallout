@@ -2,8 +2,10 @@ from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 from dotenv import load_dotenv, find_dotenv
 from schemas.user import User
+import jwt
 from mongoengine import connect, Document, StringField, DateTimeField
 from werkzeug.security import generate_password_hash
+from datetime import datetime, timedelta, timezone
 import os
 
 # Initialize Flask app
@@ -35,6 +37,9 @@ def add_user():
 
     return jsonify({"message": "User added successfully"}), 201
 
+SECRET_KEY = os.getenv("SECRET_KEY")
+print("Loaded SECRET_KEY:", SECRET_KEY)
+
 @app.route('/api/login', methods=['Post'])
 def login():
     data = request.get_json()
@@ -52,7 +57,13 @@ def login():
     if not user.passwordVerify(password):
         return jsonify({"error": "Invalid password"}), 401
 
-    return jsonify({"message": "Login successful"}), 200
+    payload = {
+        "username": username,
+        "exp": datetime.now(timezone.utc) + timedelta(hours=1) 
+    }
+    token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
+    return jsonify({"message": "Login successful", "token": token}), 200
 
 
     
